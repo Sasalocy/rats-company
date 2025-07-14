@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RATS - Not An Inheritance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #FFFFFF;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #FFFFFF;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #cccccc;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: #FFFFFF;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, #000000 0%, #111111 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.8) 70%);
+        }
+
+        .hero-content {
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-logo {
+            height: 120px;
+            width: auto;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Product Showcase */
+        .product-showcase {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 4rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 2rem;
+        }
+
+        .product-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .product-info p {
+            opacity: 0.9;
+            line-height: 1.8;
+        }
+
+        /* About Section */
+        .about {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, #000000 0%, #111111 100%);
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-content p {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #333333 0%, #555555 100%);
+            color: #FFFFFF;
+            padding: 1rem 3rem;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid transparent;
+            margin-top: 2rem;
+        }
+
+        .cta-button:hover {
+            background: transparent;
+            border-color: #FFFFFF;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: #000000;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer p {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .hero-logo {
+                height: 80px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-content p {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555555;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <svg class="logo" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                <!-- Rat silhouette -->
+                <path d="M140 15 C145 12, 152 12, 157 15 C162 18, 165 22, 165 27 C165 32, 162 36, 157 39 C155 40, 153 40.5, 151 40.8 C151 42, 151.5 43, 152.5 43.5 C154 44.2, 155 45.5, 155 47 C155 49, 153 51, 151 51 C149 51, 147 49, 147 47 C147 45.8, 147.5 44.8, 148.2 44 C146.5 43.5, 145 42.5, 144 41 C142 43, 139 44, 136 44 C130 44, 125 39, 125 33 C125 27, 130 22, 136 22 C138 22, 140 22.5, 141.5 23.5 C141 20, 140.2 17, 140 15 Z M148 25 C148.5 25, 149 25.5, 149 26 C149 26.5, 148.5 27, 148 27 C147.5 27, 147 26.5, 147 26 C147 25.5, 147.5 25, 148 25 Z" fill="white"/>
+                
+                <!-- Text RATS -->
+                <text x="20" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="300" letter-spacing="8" fill="white">RATS</text>
+            </svg>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#collection">Collection</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <svg class="hero-logo" viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+                <!-- Rat silhouette -->
+                <path d="M210 22 C217 18, 228 18, 236 22 C244 26, 248 33, 248 40 C248 47, 244 54, 236 58 C233 59.5, 229 60.2, 226 60.7 C226 62.5, 227 64, 228.5 64.8 C231 65.8, 232.5 67.8, 232.5 70 C232.5 73, 229.5 76, 226.5 76 C223.5 76, 220.5 73, 220.5 70 C220.5 68.2, 221.2 66.7, 222.3 65.5 C219.8 64.8, 217.5 63.3, 216 61 C213 64, 208.5 65.5, 204 65.5 C195 65.5, 187.5 58, 187.5 49 C187.5 40, 195 32.5, 204 32.5 C207 32.5, 210 33.2, 212.2 34.8 C211.5 29.5, 210.8 25, 210 22 Z M222 37 C223 37, 223.5 37.5, 223.5 38.5 C223.5 39.5, 223 40, 222 40 C221 40, 220.5 39.5, 220.5 38.5 C220.5 37.5, 221 37, 222 37 Z" fill="white"/>
+                
+                <!-- Text RATS -->
+                <text x="30" y="60" font-family="Arial, sans-serif" font-size="36" font-weight="300" letter-spacing="12" fill="white">RATS</text>
+            </svg>
+            <p>not an inheritance</p>
+        </div>
+    </section>
+
+    <!-- Product Showcase -->
+    <section class="product-showcase" id="collection">
+        <h2 class="section-title">klēronomía collection</h2>
+        <p class="section-subtitle">the strong legacy</p>
+        
+        <div class="product-grid">
+            <div class="product-card">
+                <div style="width: 100%; height: 300px; background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                    <!-- Background elements -->
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.02) 10px, rgba(255,255,255,0.02) 20px);"></div>
+                    
+                    <!-- T-shirt ribcage design -->
+                    <div style="position: relative; width: 120px; height: 150px; background: #111; border-radius: 10px 10px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <div style="color: #888; font-size: 8px; margin-bottom: 5px;">klēronomía</div>
+                        <!-- Simplified ribcage -->
+                        <div style="width: 60px; height: 80px; position: relative;">
+                            <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 2px; height: 60px; background: #666;"></div>
+                            <div style="position: absolute; top: 15px; left: 50%; transform: translateX(-50%); width: 40px; height: 2px; background: #666; border-radius: 10px;"></div>
+                            <div style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 45px; height: 2px; background: #666; border-radius: 10px;"></div>
+                            <div style="position: absolute; top: 25px; left: 50%; transform: translateX(-50%); width: 50px; height: 2px; background: #666; border-radius: 10px;"></div>
+                            <div style="position: absolute; top: 30px; left: 50%; transform: translateX(-50%); width: 50px; height: 2px; background: #666; border-radius: 10px;"></div>
+                            <div style="position: absolute; top: 35px; left: 50%; transform: translateX(-50%); width: 50px; height: 2px; background: #666; border-radius: 10px;"></div>
+                            <div style="position: absolute; top: 40px; left: 50%; transform: translateX(-50%); width: 45px; height: 2px; background: #666; border-radius: 10px;"></div>
+                            <div style="position: absolute; top: 45px; left: 50%; transform: translateX(-50%); width: 40px; height: 2px; background: #666; border-radius: 10px;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- T-shirt text design -->
+                    <div style="position: relative; width: 120px; height: 150px; background: #111; border-radius: 10px 10px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-left: 20px;">
+                        <div style="color: #888; font-size: 7px; text-align: center; line-height: 1.2; padding: 10px;">
+                            IF I HAVE<br>KNOWN KIA,<br>THEN IT<br>THINKS OF<br>YOU
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>klēronomía collection</h3>
+                    <p>Limited drop. No restock. Legacy isn't passed down — it's forged. Two exclusive designs that embody the essence of creating your own path and breaking free from predetermined destinies.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="#contact" class="cta-button">ORDER NOW</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-content">
+            <h2 class="section-title">About RATS</h2>
+            <p>RATS isn't just a clothing brand — it's a philosophy. We believe that legacy isn't something you inherit, but something you create through your own strength and determination.</p>
+            <p>Our klēronomía collection embodies this belief. Each piece is crafted for those who refuse to be defined by the past, who choose to forge their own destiny. Limited drops mean exclusivity, and no restocks mean commitment to authenticity.</p>
+            <p>Join us in creating a legacy that's truly yours.</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="about" id="contact">
+        <div class="about-content">
+            <h2 class="section-title">Contact Us</h2>
+            <p>Ready to forge your legacy? Get in touch with us to secure your piece from the klēronomía collection.</p>
+            <a href="mailto:info@rats.com" class="cta-button">GET IN TOUCH</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy;Rats-NotAnInheritance 2025</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header background opacity on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            const scrollY = window.scrollY;
+            
+            if (scrollY > 50) {
+                header.style.background = 'rgba(0, 0, 0, 0.98)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.95)';
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenu.addEventListener('click', function() {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 1s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.product-card, .about-content').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Preload images for better performance
+        function preloadImage(src) {
+            const img = new Image();
+            img.src = src;
+        }
+
+        // Preload the product image
+        preloadImage('blob:https://web.whatsapp.com/bd7aef19-7019-4056-b878-e11a4ee07ccd');
+    </script>
+</body>
+</html>
